@@ -2,28 +2,29 @@ pipeline {
     agent any
 
     stages {
-	
-        stage('checkout') {
+       
+	   stage('Clone scm') {
             steps {
-                echo 'git checkout stage'
-				git branch: 'main', url: 'https://github.com/devopstraininghub/mindcircuit17d.git'
-            }
-        }
-
-        stage('build') {
-            steps {
-                echo 'Building with maven '
-				sh 'mvn clean install '
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                echo 'Deploying to tomcat'
-				deploy adapters: [tomcat9(alternativeDeploymentContext: '', credentialsId: 'tomcat', path: '', url: 'http://54.160.144.88:8081/')], contextPath: 'insta', war: '**/*.war'
+                echo 'clone code from git repository'
+			    git branch: 'main', url: 'https://github.com/Sunilg3377/mindcircuit17d.git'
+				
 				
             }
-        }		
+        }
+		 stage('Build artifact') {
+            steps {
+                echo 'maven build'
+				sh 'mvn clean install'
+            }
+        }
 		
+		 stage('deploy to webserver') {
+            steps {
+                echo 'deploy to tomactserver'
+				deploy adapters: [tomcat9(alternativeDeploymentContext: '', credentialsId: 'tomcat', path: '', url: 'http://ec2-18-232-163-89.compute-1.amazonaws.com:8080/')], contextPath: 'sunil-mc', war: '**/*.war'
+				
+				
+            }
+        }
     }
 }
