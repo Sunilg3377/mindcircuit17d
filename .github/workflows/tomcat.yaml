@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Build WAR using Maven
-        run: mvn clean packages
+        run: mvn clean package
 
       - name: Deploy WAR to Tomcat
         run: 
