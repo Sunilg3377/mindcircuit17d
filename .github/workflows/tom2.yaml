@@ -25,7 +25,7 @@ jobs:
         run: mvn clean package
        # run: mvn clean package -DskipTests
 
-      - name: Deploy WAR to Tomcat
+      - name: Deploy WAR to sunil
         run: |
               WAR_FILE=$(ls target/*.war | head -n 1)
               APP_NAME=myapp
