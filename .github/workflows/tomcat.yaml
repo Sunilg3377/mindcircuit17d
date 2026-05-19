@@ -1,7 +1,7 @@
 name: Deploy tomcat via manager api
 
 on:
-  push:
+#  push:
     branches:
       - main
   workflow_dispatch:
