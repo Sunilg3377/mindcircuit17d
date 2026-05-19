@@ -1,9 +1,9 @@
 name: Deploy tomcat via manager api
 
-on: 
+on:
   push:
-   branches:
-     - main
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
@@ -11,23 +11,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: checkout repository
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Build WAR using Maven
         run: mvn clean package
 
-      - name: Deploy WAR to tomcat
-        run: 
+      - name: Deploy WAR to Tomcat
+        run: |
           WAR_FILE=$(ls target/*.war | head -n 1)
-              APP_NAME=myapp
-              curl -u "${{ secrets.TOMCAT_USERNAME }}:${{ secrets.TOMCAT_PASSWORD }}" \
-                --upload-file "$WAR_FILE" \
-                "http://${{ secrets.TOMCAT_HOST }}:8080/manager/text/deploy?path=/$APP_NAME&update=true"
-         
-      
-    
-       
-        
-        
-  
+          APP_NAME=myapp
+
+          curl -u "${{ secrets.TOMCAT_USERNAME }}:${{ secrets.TOMCAT_PASSWORD }}" \
+            --upload-file "$WAR_FILE" \
+            "http://${{ secrets.TOMCAT_HOST }}:8080/manager/text/deploy?path=/$APP_NAME&update=true"
