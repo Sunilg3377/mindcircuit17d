@@ -1,4 +1,4 @@
-name: Deploy tomcat via manager api
+name: Deploy to Tomcat via Manager API
 
 on:
   push:
@@ -8,21 +8,27 @@ on:
 
 jobs:
   deploy:
-    # runs-on: ubuntu-latest
-      runs-on: self-hosted
+    #runs-on: ubuntu-latest
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        
 
-      steps:
-        - name: Checkout repository
-          uses: actions/checkout@v3
+      # - name: Set up JDK
+      #   uses: actions/setup-java@v3
+      #   with:
+      #     distribution: 'temurin' 
+      #     java-version: '11'
 
-        - name: Build WAR using Maven
-          run: mvn clean package
+      - name: Build WAR using Maven
+        run: mvn clean package
+       # run: mvn clean package -DskipTests
 
-        - name: Deploy WAR to Tomcat
-          run: |
+      - name: Deploy WAR to Tomcat
+        run: |
               WAR_FILE=$(ls target/*.war | head -n 1)
               APP_NAME=myapp
-
               curl -u "${{ secrets.TOMCAT_USERNAME }}:${{ secrets.TOMCAT_PASSWORD }}" \
-               --upload-file "$WAR_FILE" \
-              "http://${{ secrets.TOMCAT_HOST }}:8080/manager/text/deploy?path=/$APP_NAME&update=true"
+                --upload-file "$WAR_FILE" \
+                "http://${{ secrets.TOMCAT_HOST }}:8080/manager/text/deploy?path=/$APP_NAME&update=true"
